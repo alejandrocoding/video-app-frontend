@@ -29,6 +29,12 @@
             "styles": [
               "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/themes",
+                "src/app/_common/sass"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
