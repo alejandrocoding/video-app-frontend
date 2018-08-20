@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="mat-elevation-z8">
-  <span class="title">Videos App</span>
+  <span class="title" (click)="goHome()">Videos App</span>
   <span class="spacer"></span>
   <button mat-button routerLink="videos" #rla1="routerLinkActive" routerLinkActive="active" [color]="rla1.isActive ? 'accent' : ''">Videos</button>
   <button mat-button routerLink="users" #rla2="routerLinkActive" routerLinkActive="active" [color]="rla2.isActive ? 'accent' : ''">Users</button>
