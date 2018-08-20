@@ -6,7 +6,7 @@ import { VideosViewComponent } from './videos-view/videos-view.component';
 import { VideoAddComponent } from './video-add/video-add.component';
 import { VideoEditComponent } from './video-edit/video-edit.component';
 
-import { VideoResolver } from './shared/resolvers/video-resolver';
+import { VideoResolver } from '@app/videos/shared/resolvers/video.resolver';
 
 const routes: Routes = [
   {
@@ -14,7 +14,8 @@ const routes: Routes = [
       [
         { path: '', component: VideosViewComponent },
         { path: 'add', component: VideoAddComponent },
-        { path: 'edit/:id', component: VideoEditComponent, resolve: VideoResolver }
+        { path: 'edit/:id', component: VideoEditComponent, resolve: VideoResolver },
+        { path: '**', redirectTo: '/videos' }
       ]
   }
 ];
