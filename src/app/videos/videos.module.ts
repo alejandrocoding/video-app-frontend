@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 import { VideosRoutingModule } from './videos-routing.module';
 import { VideosComponent } from './videos.component';
@@ -11,9 +12,12 @@ import { VideoAddComponent } from './video-add/video-add.component';
 import { VideoEditComponent } from './video-edit/video-edit.component';
 import { VideoDeleteComponent } from './video-delete/video-delete.component';
 
+import { VideosService } from './shared/services/videos.service';
+
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     VideosRoutingModule
   ],
   declarations: [
@@ -24,6 +28,7 @@ import { VideoDeleteComponent } from './video-delete/video-delete.component';
     VideoAddComponent,
     VideoEditComponent,
     VideoDeleteComponent
-  ]
+  ],
+  providers: [VideosService]
 })
 export class VideosModule { }
