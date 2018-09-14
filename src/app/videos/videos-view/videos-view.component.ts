@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { VideoState } from '../shared/state/video.state';
 import { Video } from '../shared/interfaces/video.interface';
+import { VideoState } from '../shared/state/video.state';
 
 @Component({
   selector: 'app-videos-view',
