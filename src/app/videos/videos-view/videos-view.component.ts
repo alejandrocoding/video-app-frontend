@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { VideosService } from '@app/videos/shared/services/videos.service';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+
+import { VideoState } from '../shared/state/video.state';
+import { Video } from '../shared/interfaces/video.interface';
 
 @Component({
   selector: 'app-videos-view',
@@ -8,10 +12,11 @@ import { VideosService } from '@app/videos/shared/services/videos.service';
 })
 export class VideosViewComponent implements OnInit {
 
-  constructor(private readonly videosService: VideosService) { }
+  @Select(VideoState.getAllVideos) videos$: Observable<Video[]>;
+
+  constructor(private readonly store: Store) { }
 
   ngOnInit() {
-    this.videosService.getAll().subscribe(videos => console.log(videos));
   }
 
 }
