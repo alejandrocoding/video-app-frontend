@@ -26,6 +26,9 @@
       "@common/*": [
         "app/_common/*"
       ],
+      "@shared/*": [
+        "app/_shared/*"
+      ],
       "@components/*": [
         "app/_common/components/*"
       ],

@@ -1,15 +1,17 @@
 <div fxLayout="column">
-    <mat-form-field *ngIf="selection.selected.length === 0">
-        <input matInput (keyup)="filter($event.target.value)" placeholder="Filter">
-    </mat-form-field>
 
-    <div class="action-icons" fxLayoutAlign="end center" *ngIf="selection.selected.length > 0">
-        <button mat-icon-button *ngIf="selection.selected.length === 1">
-            <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button>
-            <mat-icon>delete</mat-icon>
-        </button>
+    <div class="table-top" fxLayout="column" fxLayoutAlign="center">
+        <mat-form-field *ngIf="selection.selected.length === 0">
+            <input matInput (keyup)="filter($event.target.value)" placeholder="Filter">
+        </mat-form-field>
+        <div fxLayout="row" fxLayoutAlign="end center" *ngIf="selection.selected.length === 1">
+            <button mat-icon-button (click)="openEdit()">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openDeleteDialog()">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
     </div>
 
     <div class="table-container mat-elevation-z8" fxLayout="column">
@@ -51,7 +53,3 @@
     </div>
 
 </div>
-
-<button mat-fab class="fab">
-    <mat-icon>add</mat-icon>
-</button>

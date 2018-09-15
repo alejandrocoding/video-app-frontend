@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
@@ -19,6 +19,9 @@ export class PermissionsTableComponent implements OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
 
   @Input() permissions: Permission[];
+
+  @Output() openEditEvt = new EventEmitter<Permission>();
+  @Output() openDeleteEvt = new EventEmitter<Permission>();
 
   constructor() { }
 
@@ -55,6 +58,16 @@ export class PermissionsTableComponent implements OnInit, OnChanges {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row.id));
+  }
+
+  openEdit() {
+    const permissionSelected = this.permissions.find(p => p.id === this.selection.selected[0]);
+    this.openEditEvt.emit(permissionSelected);
+  }
+
+  openDeleteDialog() {
+    const permissionSelected = this.permissions.find(p => p.id === this.selection.selected[0]);
+    this.openDeleteEvt.emit(permissionSelected);
   }
 
 }

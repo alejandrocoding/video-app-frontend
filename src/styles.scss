@@ -19,5 +19,16 @@ html {
             right: 36px;
             z-index: 100;
         }
+        .my-dialog{
+            width: 40vw;
+            max-width: 450px;
+            margin-top: 10vh;
+
+            max-width: 80vw;
+            pointer-events: auto;
+            width: 40vw;
+            position: static;
+            margin-top: 10vh;
+        }
     }
 }

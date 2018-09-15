@@ -34,6 +34,7 @@ import { PermissionState } from './_shared/state/permission.state';
     PermissionAddComponent,
     PermissionsTableComponent
   ],
-  providers: [PermissionsService]
+  providers: [PermissionsService],
+  entryComponents: [PermissionDeleteComponent]
 })
 export class PermissionsModule { }
