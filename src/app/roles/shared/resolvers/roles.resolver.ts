@@ -9,7 +9,7 @@ import { Role } from '../interfaces/role.interface';
 export class RolesResolver implements Resolve<Role> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-        // TODO: To implement
+        // TODO: To remove resolver
         return true;
     }
 }

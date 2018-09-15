@@ -72,6 +72,7 @@ export class PermissionState implements NgxsOnInit {
 
     @Action(DeletePermission)
     remove({ getState, patchState }: StateContext<PermissionStateModel>, { payload }: DeletePermission) {
+        // TODO: Delete permission from DB using the service and the sample up here.
         const state = getState();
         patchState({
             permissions: [...state.permissions.filter(permission => permission.id !== payload)]
