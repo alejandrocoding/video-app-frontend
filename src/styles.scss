@@ -8,5 +8,16 @@ html {
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0 auto;
+
+        .view-wrapper {
+            margin: 25px;
+        }
+        
+        .fab {
+            position: fixed;
+            bottom: 42px;
+            right: 36px;
+            z-index: 100;
+        }
     }
 }

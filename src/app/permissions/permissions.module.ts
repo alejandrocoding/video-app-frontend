@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxsModule } from '@ngxs/store';
+import { MaterialModule } from '@app/_core/material.module';
 
 import { PermissionsRoutingModule } from './permissions-routing.module';
 import { PermissionsComponent } from './permissions.component';
@@ -22,6 +23,7 @@ import { PermissionState } from './_shared/state/permission.state';
     NgxsModule.forFeature([
       PermissionState
     ]),
+    MaterialModule,
     PermissionsRoutingModule
   ],
   declarations: [

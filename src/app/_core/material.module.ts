@@ -15,6 +15,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
     imports: [
@@ -29,7 +32,10 @@ import { MatDividerModule } from '@angular/material/divider';
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
-        MatDividerModule
+        MatDividerModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule
     ],
     exports: [
         FlexLayoutModule,
@@ -43,7 +49,10 @@ import { MatDividerModule } from '@angular/material/divider';
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
-        MatDividerModule
+        MatDividerModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule
     ]
 })
 export class MaterialModule { }
