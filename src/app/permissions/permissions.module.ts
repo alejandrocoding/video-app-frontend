@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxsModule } from '@ngxs/store';
-import { MaterialModule } from '@app/_core/material.module';
+import { MaterialModule } from '@core/material.module';
 
 import { PermissionsRoutingModule } from './permissions-routing.module';
 import { PermissionsComponent } from './permissions.component';
@@ -19,6 +20,7 @@ import { PermissionState } from './_shared/state/permission.state';
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     HttpClientModule,
     NgxsModule.forFeature([
       PermissionState

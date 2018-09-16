@@ -14,7 +14,7 @@
       "@app/*": [
         "app/*"
       ],
-      "@environment/*": [
+      "@environments/*": [
         "environments/*"
       ],
       "@layout/*": [
@@ -43,7 +43,10 @@
       ],
       "@enums/*": [
         "app/_shared/enums/*"
-      ]
+      ],
+      "@validators/*": [
+        "app/_shared/validators/*"
+      ],
     },
     "typeRoots": [
       "../node_modules/@types"

@@ -1,3 +1,18 @@
-<p>
-  permission-add works!
-</p>
+<div class="view-wrapper">
+  <h2 class="view-title">Add Permission</h2>
+
+  <form [formGroup]="form" fxLayout="column">
+    <mat-form-field>
+      <input type="text" matInput formControlName="name" placeholder="Name" required />
+      <mat-error align="end">
+        <mat-error *ngIf="form.get('name').hasError('required')">Field required.</mat-error>
+        <mat-error *ngIf="form.get('name').hasError('name')">3 to 50 normal characters.</mat-error>
+        <mat-error *ngIf="form.get('name').hasError('notUnique')">This name already exist, choose an unique name.</mat-error>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<button mat-fab class="fab" (click)="save()" [disabled]="!form.valid">
+  <mat-icon>done</mat-icon>
+</button>

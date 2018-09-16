@@ -1,6 +1,7 @@
 import { State, Action, StateContext, Selector, NgxsOnInit } from '@ngxs/store';
+import { tap } from 'rxjs/internal/operators';
 
-import { AddPermission, EditPermission, DeletePermission, FetchPermissions } from '../actions/permission.actions';
+import { AddPermission, EditPermission, DeletePermission, FetchPermissions, FetchPermission } from '../actions/permission.actions';
 import { Permission } from '../interfaces/permission.interface';
 import { PermissionsService } from '../services/permissions.service';
 
@@ -23,6 +24,12 @@ export class PermissionState implements NgxsOnInit {
         return state.permissions;
     }
 
+    // TODO: Test/Investigate how this works and if it does work
+    @Selector()
+    static getPermissionById(state: PermissionStateModel, id: string) {
+        return state.permissions.find(p => p.id === id);
+    }
+
     async ngxsOnInit(ctx: StateContext<PermissionStateModel>) {
         return ctx.dispatch(new FetchPermissions());
     }
@@ -34,49 +41,46 @@ export class PermissionState implements NgxsOnInit {
         patchState({ ...state, permissions });
     }
 
-
-    // @Action(AddTodo)
-    // feedAnimals(ctx: StateContext<TodoListModel>, action: AddTodo) {
-
-    //     // ngxs will subscribe to the post observable for you if you return it from the action
-    //     return this.http.post('/api/todo-list').pipe(
-
-    //         // we use a tap here, since mutating the state is a side effect
-    //         tap(newTodo) => {
-    //             const state = ctx.getState();
-    //             ctx.setState({
-    //                 ...state,
-    //                 todolist: [...state.todolist, newTodo]
-    //             });
-    //         }),
-    //         // if the post goes sideways we need to handle it
-    //         catchError(error => window.alert('could not add todo')), ;
-    // )
-    // }
+    @Action(FetchPermission)
+    fetchById({ getState, patchState }: StateContext<PermissionStateModel>, { payload }: FetchPermission) {
+        return this.permissionsService.getById(payload).pipe(
+            tap((fetchedPermission) => {
+                const state = getState();
+                patchState({
+                    permissions: [...state.permissions.filter(permission => permission.id !== fetchedPermission.id), fetchedPermission]
+                });
+            })
+        );
+    }
 
     @Action(AddPermission)
     add({ getState, patchState }: StateContext<PermissionStateModel>, { payload }: AddPermission) {
-        const state = getState();
-        patchState({
-            permissions: [...state.permissions, payload]
-        });
+        return this.permissionsService.create({ name: payload.name }).pipe(
+            tap((createdPermission) => {
+                const state = getState();
+                patchState({
+                    permissions: [...state.permissions, createdPermission]
+                });
+            })
+        );
     }
 
     @Action(EditPermission)
-    edit({ getState, patchState }: StateContext<PermissionStateModel>, { payload }: EditPermission) {
-        const state = getState();
-        patchState({
-            permissions: [...state.permissions.filter(permission => permission.id !== payload.id), payload]
-        });
+    edit({ dispatch }: StateContext<PermissionStateModel>, { payloadId, payload }: EditPermission) {
+        return this.permissionsService.update(payloadId, { name: payload.name }).pipe(
+            tap(() => dispatch(new FetchPermission(payloadId)))
+        );
     }
 
     @Action(DeletePermission)
-    remove({ getState, patchState }: StateContext<PermissionStateModel>, { payload }: DeletePermission) {
-        // TODO: Delete permission from DB using the service and the sample up here.
-        const state = getState();
-        patchState({
-            permissions: [...state.permissions.filter(permission => permission.id !== payload)]
-        });
+    remove(ctx: StateContext<PermissionStateModel>, { payload }: DeletePermission) {
+        return this.permissionsService.delete(payload).pipe(
+            tap((deletedPermission) => {
+                const state = ctx.getState();
+                ctx.patchState({
+                    permissions: [...state.permissions.filter(permission => permission.id !== deletedPermission.id)]
+                });
+            })
+        );
     }
-
 }

@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/internal/operators';
 
+import { Util } from '@shared/util';
 import { Permission } from '../_shared/interfaces/permission.interface';
 import { PermissionState } from '../_shared/state/permission.state';
 import { DeletePermission } from '../_shared/actions/permission.actions';
-import { Util } from '@shared/util';
 
 import { PermissionDeleteComponent } from '../permission-delete/permission-delete.component';
 import { PermissionsTableComponent } from '../permissions-table/permissions-table.component';
@@ -19,22 +20,24 @@ import { PermissionsTableComponent } from '../permissions-table/permissions-tabl
 })
 export class PermissionsViewComponent implements OnInit {
 
-  @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission>;
+  @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
   @ViewChild(PermissionsTableComponent) table: PermissionsTableComponent;
 
   constructor(
     private readonly store: Store,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog) { }
 
   ngOnInit() { }
 
   goToAdd() {
-    console.log('add'); // TODO: To implement
+    this.router.navigate(['add'], { relativeTo: this.route });
   }
 
   goToEdit(permission: Permission) {
-    console.log('edit', permission); // TODO: To implement
+    this.router.navigate([`edit/${permission.id}`], { relativeTo: this.route });
   }
 
   openDelete(permission: Permission) {
@@ -45,8 +48,10 @@ export class PermissionsViewComponent implements OnInit {
 
   private deletePermission(permission: Permission) {
     this.table.selection.clear();
-    this.store.dispatch(new DeletePermission(permission.id));
-    this.snackBar.open(`Permission '${permission.name}' has been deleted`, null, { duration: 5000 });
+    this.store.dispatch(new DeletePermission(permission.id))
+      .subscribe((deletedPermission) => {
+        this.snackBar.open(`Permission '${deletedPermission.name}' has been deleted`, null, { duration: 5000 });
+      });
   }
 
 }

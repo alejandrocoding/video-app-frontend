@@ -4,10 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { GlobalErrorHandlerModule } from '@core/global-error-handler.module';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { LayoutModule } from '@layout/layout.module';
+import { AppRoutingModule } from './app-routing.module';
+
+import { AppComponent } from './app.component';
 
 @NgModule({
   imports: [
@@ -15,8 +17,9 @@ import { LayoutModule } from '@layout/layout.module';
     BrowserAnimationsModule,
     NgxsModule.forRoot([]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
+    GlobalErrorHandlerModule,
     AppRoutingModule,
-    LayoutModule
+    LayoutModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
