@@ -51,8 +51,8 @@ export class PermissionsViewComponent implements OnInit {
   private deletePermission(permission: Permission) {
     this.table.selection.clear();
     this.store.dispatch(new DeletePermission(permission.id))
-      .subscribe((deletedPermission) => {
-        this.snackBar.open(`Permission '${deletedPermission.name}' has been deleted`, null, { duration: 5000 });
+      .subscribe(() => {
+        this.snackBar.open(`Permission '${permission.name}' has been deleted`, null, { duration: 5000 });
       });
   }
 
