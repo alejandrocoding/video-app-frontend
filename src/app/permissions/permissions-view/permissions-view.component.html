@@ -1,3 +1,5 @@
+<mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
+
 <div class="view-wrapper">
     <app-permissions-table [permissions]="permissions$ | async" (openEditEvt)="goToEdit($event)" (openDeleteEvt)="openDelete($event)"></app-permissions-table>
 </div>

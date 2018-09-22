@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Select, Store } from '@ngxs/store';
+
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/internal/operators';
 
@@ -21,6 +22,7 @@ import { PermissionsTableComponent } from '../permissions-table/permissions-tabl
 export class PermissionsViewComponent implements OnInit {
 
   @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
+  @Select(PermissionState.isLoading) loading$: Observable<boolean>;
   @ViewChild(PermissionsTableComponent) table: PermissionsTableComponent;
 
   constructor(

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material Modules
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -23,6 +24,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
     imports: [
         FlexLayoutModule,
+        MatProgressBarModule,
         MatToolbarModule,
         MatMenuModule,
         MatCheckboxModule,
@@ -41,6 +43,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ],
     exports: [
         FlexLayoutModule,
+        MatProgressBarModule,
         MatToolbarModule,
         MatMenuModule,
         MatCheckboxModule,

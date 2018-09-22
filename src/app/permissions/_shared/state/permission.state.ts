@@ -1,5 +1,6 @@
 import { State, Action, StateContext, Selector, NgxsOnInit } from '@ngxs/store';
-import { tap } from 'rxjs/internal/operators';
+import { Actions, ofActionDispatched, ofActionSuccessful, ofActionErrored } from '@ngxs/store';
+import { tap, take } from 'rxjs/internal/operators';
 
 import { AddPermission, EditPermission, DeletePermission, FetchPermissions, FetchPermission } from '../actions/permission.actions';
 import { Permission } from '../interfaces/permission.interface';
@@ -7,21 +8,31 @@ import { PermissionsService } from '../services/permissions.service';
 
 export class PermissionStateModel {
     permissions: Permission[];
+    loading: boolean;
 }
 
 @State<PermissionStateModel>({
     name: 'permissions',
     defaults: {
-        permissions: []
+        permissions: [],
+        loading: false
     }
 })
 export class PermissionState implements NgxsOnInit {
 
-    constructor(private readonly permissionsService: PermissionsService) { }
+    constructor(
+        private readonly actions$: Actions,
+        private readonly permissionsService: PermissionsService) {
+    }
 
     @Selector()
     static getAllPermissions(state: PermissionStateModel) {
         return state.permissions;
+    }
+
+    @Selector()
+    static isLoading(state: PermissionStateModel) {
+        return state.loading;
     }
 
     // TODO: Test/Investigate how this works and if it does work
@@ -30,8 +41,15 @@ export class PermissionState implements NgxsOnInit {
         return state.permissions.find(p => p.id === id);
     }
 
-    async ngxsOnInit(ctx: StateContext<PermissionStateModel>) {
+    ngxsOnInit(ctx: StateContext<PermissionStateModel>) {
+        this.handleEffects(ctx);
         return ctx.dispatch(new FetchPermissions());
+    }
+
+    private handleEffects({ getState, patchState }: StateContext<PermissionStateModel>) {
+        this.actions$.pipe(ofActionDispatched(FetchPermissions), take(1)).subscribe(() => patchState({ ...getState(), loading: true }));
+        this.actions$.pipe(ofActionSuccessful(FetchPermissions), take(1)).subscribe(() => patchState({ ...getState(), loading: false }));
+        this.actions$.pipe(ofActionErrored(FetchPermissions), take(1)).subscribe(() => patchState({ ...getState(), loading: false }));
     }
 
     @Action(FetchPermissions)
