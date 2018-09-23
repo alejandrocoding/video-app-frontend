@@ -11,7 +11,7 @@ import { Role } from '../_shared/interfaces/role.interface';
 })
 export class RolesTableComponent implements OnInit, OnChanges {
 
-  displayedColumns: string[] = ['select', 'name', 'updatedAt', 'createdAt'];
+  displayedColumns: string[] = ['select', 'name', 'permissions', 'updatedAt', 'createdAt'];
   dataSource: MatTableDataSource<Role>;
   selection = new SelectionModel<string>(true, []);
 

@@ -2,7 +2,7 @@ import { State, Action, StateContext, Selector, NgxsOnInit } from '@ngxs/store';
 import { Actions, ofActionDispatched, ofActionSuccessful, ofActionErrored } from '@ngxs/store';
 import { tap, take } from 'rxjs/internal/operators';
 
-import { AddRole, EditRole, DeleteRole, FetchRoles, FetchRole } from '../actions/role.actions';
+import { AddRole, EditRoleName, EditRolePermissionsId, DeleteRole, FetchRoles, FetchRole } from '../actions/role.actions';
 import { Role } from '../interfaces/role.interface';
 import { RolesService } from '../services/roles.service';
 
@@ -77,9 +77,18 @@ export class RoleState implements NgxsOnInit {
         );
     }
 
-    @Action(EditRole)
-    edit({ dispatch }: StateContext<RoleStateModel>, { payloadId, payload }: EditRole) {
-        return this.rolesService.update(payloadId, { name: payload.name, permissionsId: payload.permissionsId }).pipe(
+    @Action(EditRoleName)
+    editName({ dispatch }: StateContext<RoleStateModel>, { payloadId, payload }: EditRoleName) {
+        const { name } = payload;
+        return this.rolesService.updateName(payloadId, { name }).pipe(
+            tap(() => dispatch(new FetchRole(payloadId)))
+        );
+    }
+
+    @Action(EditRolePermissionsId)
+    editPermissions({ dispatch }: StateContext<RoleStateModel>, { payloadId, payload }: EditRolePermissionsId) {
+        const { permissionsId } = payload;
+        return this.rolesService.updatePermissions(payloadId, { permissionsId }).pipe(
             tap(() => dispatch(new FetchRole(payloadId)))
         );
     }

@@ -8,6 +8,7 @@
     .mat-column-name {
         width: calc(100% - (150px * 2) - 100px);
     }
+    .mat-column-permissions,
     .mat-column-updatedAt,
     .mat-column-createdAt {
         width: 150px;

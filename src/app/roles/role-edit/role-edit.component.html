@@ -1,3 +1,35 @@
-<p>
-  role-edit works!
-</p>
+<div class="view-wrapper">
+  <h2 class="view-title">Edit Role</h2>
+
+  <form [formGroup]="form" fxLayout="column">
+    <mat-form-field>
+      <input type="text" matInput formControlName="name" placeholder="Name" required />
+      <mat-error align="end">
+        <mat-error *ngIf="form.get('name').hasError('required')">Field required.</mat-error>
+        <mat-error *ngIf="form.get('name').hasError('name')">3 to 50 normal characters.</mat-error>
+        <mat-error *ngIf="form.get('name').hasError('notUnique')">This name already exist, choose an unique name.</mat-error>
+      </mat-error>
+    </mat-form-field>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-around">
+      <mat-list fxFlex="25" fxLayout="column" fxLayoutGap="25px">
+        <h3>Videos Permissions</h3>
+        <mat-divider></mat-divider>
+        <mat-radio-group fxLayout="column" fxLayoutGap="25px" formControlName="video-permission">
+          <mat-radio-button [value]="permission.id" *ngFor="let permission of videoPermissions">{{permission.name}}</mat-radio-button>
+        </mat-radio-group>
+      </mat-list>
+      <mat-list fxFlex="25" fxLayout="column" fxLayoutGap="25px">
+        <h3>Administration Permissions</h3>
+        <mat-divider></mat-divider>
+        <mat-checkbox (change)="toggleAdminPermissionId(permission.id)" [checked]="selectedAdminPermissionsIds.includes(permission.id)"
+          *ngFor="let permission of adminPermissions">
+          {{permission.name}}
+        </mat-checkbox>
+      </mat-list>
+    </div>
+  </form>
+</div>
+
+<button mat-fab class="fab" (click)="update()" [disabled]="!form.valid">
+  <mat-icon>done</mat-icon>
+</button>

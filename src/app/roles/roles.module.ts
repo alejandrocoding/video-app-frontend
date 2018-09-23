@@ -16,6 +16,8 @@ import { RoleDeleteComponent } from './role-delete/role-delete.component';
 
 import { RolesService } from './_shared/services/roles.service';
 import { RoleState } from './_shared/state/role.state';
+import { PermissionState } from '@app/permissions/_shared/state/permission.state';
+import { PermissionsService } from '@app/permissions/_shared/services/permissions.service';
 
 @NgModule({
   imports: [
@@ -23,7 +25,8 @@ import { RoleState } from './_shared/state/role.state';
     ReactiveFormsModule,
     HttpClientModule,
     NgxsModule.forFeature([
-      RoleState
+      RoleState,
+      PermissionState
     ]),
     MaterialModule,
     RolesRoutingModule
@@ -36,7 +39,7 @@ import { RoleState } from './_shared/state/role.state';
     RoleEditComponent,
     RoleDeleteComponent
   ],
-  providers: [RolesService],
+  providers: [RolesService, PermissionsService],
   entryComponents: [RoleDeleteComponent]
 })
 export class RolesModule { }

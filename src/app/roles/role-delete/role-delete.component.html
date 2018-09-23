@@ -1,3 +1,6 @@
-<p>
-  role-delete works!
-</p>
+<h2 mat-dialog-title>Delete Role?</h2>
+<mat-dialog-content>Ensure that no users are using this role, otherwise the deletion will not be executed.</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end" cdkFocusInitial>
+  <button mat-button color="primary" mat-dialog-close>CANCEL</button>
+  <button mat-button color="primary" [mat-dialog-close]="data">DELETE</button>
+</mat-dialog-actions>
