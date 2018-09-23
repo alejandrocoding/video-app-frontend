@@ -8,6 +8,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -20,6 +21,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     imports: [
@@ -28,6 +30,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         MatToolbarModule,
         MatMenuModule,
         MatCheckboxModule,
+        MatRadioModule,
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
@@ -39,7 +42,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatListModule
     ],
     exports: [
         FlexLayoutModule,
@@ -47,6 +51,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         MatToolbarModule,
         MatMenuModule,
         MatCheckboxModule,
+        MatRadioModule,
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
@@ -58,7 +63,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatListModule
     ]
 })
 export class MaterialModule { }

@@ -1,1 +1,9 @@
-<app-roles-table></app-roles-table>
+<mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
+
+<div class="view-wrapper">
+    <app-roles-table [roles]="roles$ | async" (openEditEvt)="goToEdit($event)" (openDeleteEvt)="openDelete($event)"></app-roles-table>
+</div>
+
+<button mat-fab class="fab" (click)="goToAdd()">
+    <mat-icon>add</mat-icon>
+</button>

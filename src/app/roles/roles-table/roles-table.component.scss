@@ -1,0 +1,19 @@
+.table-top {
+    height: 70px;
+}
+
+.table-container {
+    max-height: 70vh;
+    overflow: auto;
+    .mat-column-name {
+        width: calc(100% - (150px * 2) - 100px);
+    }
+    .mat-column-updatedAt,
+    .mat-column-createdAt {
+        width: 150px;
+    }
+    
+    .mat-column-select {
+        width: 100px;
+    }
+}

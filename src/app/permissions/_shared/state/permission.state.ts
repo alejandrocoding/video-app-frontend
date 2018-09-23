@@ -73,7 +73,8 @@ export class PermissionState implements NgxsOnInit {
 
     @Action(AddPermission)
     add({ getState, patchState }: StateContext<PermissionStateModel>, { payload }: AddPermission) {
-        return this.permissionsService.create({ name: payload.name }).pipe(
+        const { name, type } = payload;
+        return this.permissionsService.create({ name, type }).pipe(
             tap((createdPermission) => {
                 const state = getState();
                 patchState({
@@ -85,7 +86,8 @@ export class PermissionState implements NgxsOnInit {
 
     @Action(EditPermission)
     edit({ dispatch }: StateContext<PermissionStateModel>, { payloadId, payload }: EditPermission) {
-        return this.permissionsService.update(payloadId, { name: payload.name }).pipe(
+        const { name } = payload;
+        return this.permissionsService.update(payloadId, { name }).pipe(
             tap(() => dispatch(new FetchPermission(payloadId)))
         );
     }

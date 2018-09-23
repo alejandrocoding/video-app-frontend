@@ -37,7 +37,8 @@ export class PermissionAddComponent implements OnInit {
 
   private initForm() {
     this.form = this.fb.group({
-      'name': ['']
+      'name': '',
+      'type': ['', Validators.required]
     });
   }
 
@@ -60,8 +61,8 @@ export class PermissionAddComponent implements OnInit {
   }
 
   save() {
-    const name = this.form.controls.name.value;
-    this.store.dispatch(new AddPermission({ name })).subscribe(() => {
+    const { name, type } = this.form.value;
+    this.store.dispatch(new AddPermission({ name, type })).subscribe(() => {
       this.snackBar.open(`Permission '${name}' has been added`, null, { duration: 5000 });
       this.redirect();
     });

@@ -18,7 +18,7 @@ export class GlobalErrorHandler implements ErrorHandler {
             console.log('HTTPERROR:');
             console.log(response.error.error + ' --- ' + response.error.statusCode);
         } else if (response instanceof Error) {
-            console.log('ERROR:');
+            console.log('GLOBAL ERROR', response);
         }
     }
 }

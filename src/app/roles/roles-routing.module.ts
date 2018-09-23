@@ -6,15 +6,13 @@ import { RolesViewComponent } from './roles-view/roles-view.component';
 import { RoleAddComponent } from './role-add/role-add.component';
 import { RoleEditComponent } from './role-edit/role-edit.component';
 
-import { RolesResolver } from './shared/resolvers/roles.resolver';
-
 const routes: Routes = [
   {
     path: '', component: RolesComponent, children:
       [
         { path: '', component: RolesViewComponent },
         { path: 'add', component: RoleAddComponent },
-        { path: 'edit/:id', component: RoleEditComponent, resolve: RolesResolver },
+        { path: 'edit/:id', component: RoleEditComponent },
         { path: '**', redirectTo: '/roles' }
       ]
   }

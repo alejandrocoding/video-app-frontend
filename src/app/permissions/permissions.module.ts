@@ -9,10 +9,10 @@ import { PermissionsRoutingModule } from './permissions-routing.module';
 import { PermissionsComponent } from './permissions.component';
 
 import { PermissionsViewComponent } from './permissions-view/permissions-view.component';
-import { PermissionDeleteComponent } from './permission-delete/permission-delete.component';
-import { PermissionEditComponent } from './permission-edit/permission-edit.component';
-import { PermissionAddComponent } from './permission-add/permission-add.component';
 import { PermissionsTableComponent } from './permissions-table/permissions-table.component';
+import { PermissionAddComponent } from './permission-add/permission-add.component';
+import { PermissionEditComponent } from './permission-edit/permission-edit.component';
+import { PermissionDeleteComponent } from './permission-delete/permission-delete.component';
 
 import { PermissionsService } from './_shared/services/permissions.service';
 import { PermissionState } from './_shared/state/permission.state';
@@ -31,10 +31,10 @@ import { PermissionState } from './_shared/state/permission.state';
   declarations: [
     PermissionsComponent,
     PermissionsViewComponent,
-    PermissionDeleteComponent,
-    PermissionEditComponent,
+    PermissionsTableComponent,
     PermissionAddComponent,
-    PermissionsTableComponent
+    PermissionEditComponent,
+    PermissionDeleteComponent
   ],
   providers: [PermissionsService],
   entryComponents: [PermissionDeleteComponent]

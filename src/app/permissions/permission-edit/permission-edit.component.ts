@@ -37,17 +37,23 @@ export class PermissionEditComponent implements OnInit {
     this.permissions = await this.getPermissions();
     this.permission = this.permissions.find(p => p.id === this.permissionId);
     this.updateNameControl();
+    this.updateTypeControl();
     this.setValidators();
   }
 
   private initForm() {
     this.form = this.fb.group({
-      'name': ['']
+      'name': '',
+      'type': ['', Validators.required]
     });
   }
 
   private updateNameControl() {
     this.form.controls.name.setValue(this.permission.name);
+  }
+
+  private updateTypeControl() {
+    this.form.controls.type.setValue(this.permission.type);
   }
 
   private setValidators() {
@@ -69,7 +75,7 @@ export class PermissionEditComponent implements OnInit {
   }
 
   update() {
-    const name = this.form.controls.name.value;
+    const { name } = this.form.value;
     this.store.dispatch(new EditPermission(this.permissionId, { name })).subscribe(() => {
       this.snackBar.open(`Permission '${name}' has been updated`, null, { duration: 5000 });
       this.redirect();

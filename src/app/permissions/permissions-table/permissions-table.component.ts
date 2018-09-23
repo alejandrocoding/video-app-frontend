@@ -3,6 +3,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
 import { Permission } from '../_shared/interfaces/permission.interface';
+import { PermissionType } from '../_shared/enums/permission-type.enum';
 
 @Component({
   selector: 'app-permissions-table',
@@ -11,7 +12,7 @@ import { Permission } from '../_shared/interfaces/permission.interface';
 })
 export class PermissionsTableComponent implements OnInit, OnChanges {
 
-  displayedColumns: string[] = ['select', 'name', 'updatedAt', 'createdAt'];
+  displayedColumns: string[] = ['select', 'name', 'type', 'updatedAt', 'createdAt'];
   dataSource: MatTableDataSource<Permission>;
   selection = new SelectionModel<string>(true, []);
 
@@ -39,6 +40,21 @@ export class PermissionsTableComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.permissions);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  getTypeName(type: PermissionType) {
+    switch (type) {
+      case PermissionType.FullAccessVideos:
+        return 'Full Access Videos';
+      case PermissionType.ReadOnlyVideos:
+        return 'Read Only Videos';
+      case PermissionType.ManageUsers:
+        return 'Manage Users';
+      case PermissionType.ManageRoles:
+        return 'Manage Roles';
+      case PermissionType.ManagePermissions:
+        return 'Manage Permissions';
+    }
   }
 
   filter(filterValue: string) {

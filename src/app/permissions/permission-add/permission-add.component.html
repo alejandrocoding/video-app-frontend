@@ -10,6 +10,19 @@
         <mat-error *ngIf="form.get('name').hasError('notUnique')">This name already exist, choose an unique name.</mat-error>
       </mat-error>
     </mat-form-field>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="start">
+      <mat-list fxFlex="25" fxLayout="column" fxLayoutGap="25px">
+        <h3>All Permissions</h3>
+        <mat-divider></mat-divider>
+        <mat-radio-group fxLayout="column" fxLayoutGap="25px" formControlName="type">
+          <mat-radio-button value="FAV">Full Access Videos</mat-radio-button>
+          <mat-radio-button value="ROV">Read Only Videos</mat-radio-button>
+          <mat-radio-button value="MU">Manage Users</mat-radio-button>
+          <mat-radio-button value="MR">Manage Roles</mat-radio-button>
+          <mat-radio-button value="MP">Manage Permissions</mat-radio-button>
+        </mat-radio-group>
+      </mat-list>
+    </div>
   </form>
 </div>
 
