@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
 import { Store, Select } from '@ngxs/store';
-import { Observable, forkJoin } from 'rxjs';
-import { skipWhile, take } from 'rxjs/internal/operators';
+import { Observable, forkJoin, Subscription } from 'rxjs';
+import { skipWhile, take, map } from 'rxjs/internal/operators';
 
 import { nameValidator } from '@validators/name.validator';
 import { uniqueNameValidator } from '@validators/unique-name.validator';
@@ -34,6 +34,7 @@ export class RoleAddComponent implements OnInit {
   private selectedAdminPermissionsIds: string[] = [];
 
   form: FormGroup;
+  subscription: Subscription;
 
   constructor(
     private readonly store: Store,
@@ -42,11 +43,25 @@ export class RoleAddComponent implements OnInit {
     private readonly snackBar: MatSnackBar,
     private readonly fb: FormBuilder) { }
 
+  // TODO: REVISAR OTROS COMPONENTES
+  // Tengo que terminar de revisar el codigo de roles y permissions
+  // 1) Revisar como funcionan los getRoles, getPermissiones y esas llamadas que esperan del otro
+  // 2) Buscar forma segura y limpia, sobre todo, ver diferencias entre refresh y redirect al componente
+  // 3) Revisar los pipes, switchMaps, y demás operadores usados
+
   async ngOnInit() {
     this.initForm();
-    this.setPermissions();
-    this.roles = await this.getRoles();
-    this.setValidators();
+    this.subscription = forkJoin(
+      this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)),
+      this.roles$.pipe(skipWhile(roles => roles.length === 0), take(1)),
+    )
+      .pipe(map(result => ({ permissions: result[0], roles: result[1] })), take(1))
+      .subscribe(result => {
+        this.roles = result.roles;
+        this.adminPermissions = this.getAdminPermissions(result.permissions);
+        this.videoPermissions = this.getVideoPermissions(result.permissions);
+        this.setValidators();
+      });
   }
 
   private initForm() {
@@ -62,33 +77,14 @@ export class RoleAddComponent implements OnInit {
     ]);
   }
 
-  private getRoles() {
-    return this.store.select(state => state.roles.roles).pipe<Role[]>(take((this.roles.length === 0) ? 1 : 0)).toPromise();
+  private getVideoPermissions(permissions: Permission[]) {
+    return permissions.filter(p => p.type === PermissionType.FullAccessVideos || p.type === PermissionType.ReadOnlyVideos);
   }
 
-  private setPermissions() {
-    // forkJoin(
-    //   this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)),
-    //   this.roles$.pipe(skipWhile(roles => roles.length === 0), take(1))
-    // ).subscribe(result => {
-    //   console.log(result[0]);
-    //   console.log(result[1]);
-    // });
-    // TODO:
-    // Tengo que terminar de revisar el codigo de roles y permissions
-    // 1) Revisar como funcionan los getRoles, getPermissiones y esas llamadas que esperan del otro
-    // 2) Buscar forma segura y limpia, sobre todo, ver diferencias entre refresh y redirect al componente
-    // 3) Revisar los pipes, switchMaps, y demás operadores usados
-
-    this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)).subscribe(permissions => {
-      this.videoPermissions = permissions.filter(p =>
-        p.type === PermissionType.FullAccessVideos ||
-        p.type === PermissionType.ReadOnlyVideos);
-      this.adminPermissions = permissions.filter(p =>
-        p.type === PermissionType.ManageUsers ||
-        p.type === PermissionType.ManageRoles ||
-        p.type === PermissionType.ManagePermissions);
-    });
+  private getAdminPermissions(permissions: Permission[]) {
+    return permissions.filter(p => p.type === PermissionType.ManageUsers ||
+      p.type === PermissionType.ManageRoles ||
+      p.type === PermissionType.ManagePermissions);
   }
 
   private redirect() {
