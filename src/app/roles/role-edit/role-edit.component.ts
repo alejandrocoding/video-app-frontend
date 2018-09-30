@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { Store, Select } from '@ngxs/store';
 import { Observable, forkJoin } from 'rxjs';
-import { skipWhile, take } from 'rxjs/internal/operators';
+import { skipWhile, take, map } from 'rxjs/internal/operators';
 
 import { nameValidator } from '@validators/name.validator';
 import { uniqueNameValidator } from '@validators/unique-name.validator';
@@ -47,14 +47,27 @@ export class RoleEditComponent implements OnInit {
   async ngOnInit() {
     this.initForm();
     this.roleId = this.route.snapshot.params.id;
-    // TODO: Refactor this call
-    this.setPermissionsAndRoles();
+
+    forkJoin(
+      this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)),
+      this.roles$.pipe(skipWhile(roles => roles.length === 0), take(1)),
+    )
+      .pipe(map(result => ({ permissions: result[0], roles: result[1] })), take(1))
+      .subscribe(result => {
+        this.adminPermissions = this.getAdminPermissions(result.permissions);
+        this.videoPermissions = this.getVideoPermissions(result.permissions);
+        this.roles = result.roles;
+        this.role = this.roles.find(p => p.id === this.roleId);
+        this.updateNameControl();
+        this.updatePermissionsControl();
+        this.setValidators();
+      });
   }
 
   private initForm() {
     this.form = this.fb.group({
       'name': '',
-      'video-permission': ['', Validators.required]
+      'videoPermission': ['', Validators.required]
     });
   }
 
@@ -66,7 +79,7 @@ export class RoleEditComponent implements OnInit {
     const videoPermissionId = this.videoPermissions.find(p => this.role.permissionsId.includes(p.id));
     const adminPermissionsId = this.adminPermissions.filter(p => this.role.permissionsId.includes(p.id));
 
-    this.form.controls['video-permission'].setValue(videoPermissionId.id);
+    this.form.controls.videoPermission.setValue(videoPermissionId.id);
     this.selectedAdminPermissionsIds = adminPermissionsId.map(p => p.id);
   }
 
@@ -77,30 +90,14 @@ export class RoleEditComponent implements OnInit {
     ]);
   }
 
-  private setPermissionsAndRoles() {
-    this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)).subscribe(permissions => {
-      this.videoPermissions = permissions.filter(p =>
-        p.type === PermissionType.FullAccessVideos ||
-        p.type === PermissionType.ReadOnlyVideos);
-      this.adminPermissions = permissions.filter(p =>
-        p.type === PermissionType.ManageUsers ||
-        p.type === PermissionType.ManageRoles ||
-        p.type === PermissionType.ManagePermissions);
-      this.setRoles();
-    });
+  private getVideoPermissions(permissions: Permission[]) {
+    return permissions.filter(p => p.type === PermissionType.FullAccessVideos || p.type === PermissionType.ReadOnlyVideos);
   }
 
-  private setRoles() {
-    this.store.select(state => state.roles.roles).pipe<Role[], Role[]>(
-      skipWhile(roles => roles.length <= 0),
-      take((this.roles.length === 0) ? 1 : 0)
-    ).subscribe(roles => {
-      this.roles = roles;
-      this.role = this.roles.find(p => p.id === this.roleId);
-      this.updateNameControl();
-      this.updatePermissionsControl();
-      this.setValidators();
-    });
+  private getAdminPermissions(permissions: Permission[]) {
+    return permissions.filter(p => p.type === PermissionType.ManageUsers ||
+      p.type === PermissionType.ManageRoles ||
+      p.type === PermissionType.ManagePermissions);
   }
 
   private redirect() {
@@ -115,7 +112,7 @@ export class RoleEditComponent implements OnInit {
 
   update() {
     const name = this.form.controls.name.value;
-    const permissionsId = [this.form.controls['video-permission'].value, ...this.selectedAdminPermissionsIds];
+    const permissionsId = [this.form.controls.videoPermission.value, ...this.selectedAdminPermissionsIds];
     if (name !== this.role.name) {
       this.updateRoleName(this.roleId, name);
     }

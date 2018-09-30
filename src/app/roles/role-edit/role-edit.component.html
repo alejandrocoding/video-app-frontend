@@ -14,7 +14,7 @@
       <mat-list fxFlex="25" fxLayout="column" fxLayoutGap="25px">
         <h3>Videos Permissions</h3>
         <mat-divider></mat-divider>
-        <mat-radio-group fxLayout="column" fxLayoutGap="25px" formControlName="video-permission">
+        <mat-radio-group fxLayout="column" fxLayoutGap="25px" formControlName="videoPermission">
           <mat-radio-button [value]="permission.id" *ngFor="let permission of videoPermissions">{{permission.name}}</mat-radio-button>
         </mat-radio-group>
       </mat-list>

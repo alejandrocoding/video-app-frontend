@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/internal/operators';
 
 import { Util } from '@shared/util';
+
 import { Role } from '../_shared/interfaces/role.interface';
 import { RoleState } from '../_shared/state/role.state';
 import { DeleteRole } from '../_shared/actions/role.actions';
@@ -23,6 +24,7 @@ export class RolesViewComponent implements OnInit {
 
   @Select(RoleState.getAllRoles) roles$: Observable<Role[]>;
   @Select(RoleState.isLoading) loading$: Observable<boolean>;
+
   @ViewChild(RolesTableComponent) table: RolesTableComponent;
 
   constructor(

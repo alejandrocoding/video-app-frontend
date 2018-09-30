@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
 import { Store, Select } from '@ngxs/store';
-import { Observable, forkJoin, Subscription } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { skipWhile, take, map } from 'rxjs/internal/operators';
 
 import { nameValidator } from '@validators/name.validator';
@@ -34,7 +34,6 @@ export class RoleAddComponent implements OnInit {
   private selectedAdminPermissionsIds: string[] = [];
 
   form: FormGroup;
-  subscription: Subscription;
 
   constructor(
     private readonly store: Store,
@@ -51,7 +50,7 @@ export class RoleAddComponent implements OnInit {
 
   async ngOnInit() {
     this.initForm();
-    this.subscription = forkJoin(
+    forkJoin(
       this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)),
       this.roles$.pipe(skipWhile(roles => roles.length === 0), take(1)),
     )
@@ -67,7 +66,7 @@ export class RoleAddComponent implements OnInit {
   private initForm() {
     this.form = this.fb.group({
       'name': '',
-      'video-permission': ['', Validators.required]
+      'videoPermission': ['', Validators.required]
     });
   }
 
@@ -99,7 +98,7 @@ export class RoleAddComponent implements OnInit {
 
   save() {
     const name = this.form.controls.name.value;
-    const permissionsId = [this.form.controls['video-permission'].value, ...this.selectedAdminPermissionsIds];
+    const permissionsId = [this.form.controls.videoPermission.value, ...this.selectedAdminPermissionsIds];
     this.store.dispatch(new AddRole({ name, permissionsId, createdBy: null })).subscribe(() => {
       this.snackBar.open(`Role '${name}' has been added`, null, { duration: 5000 });
       this.redirect();

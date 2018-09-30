@@ -3,13 +3,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
-import { Store } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
+
+import { Observable } from 'rxjs';
 import { skipWhile, take } from 'rxjs/internal/operators';
 
 import { nameValidator } from '@validators/name.validator';
 import { uniqueNameValidator } from '@validators/unique-name.validator';
+
 import { EditPermission } from '../_shared/actions/permission.actions';
 import { Permission } from '../_shared/interfaces/permission.interface';
+import { PermissionState } from '../_shared/state/permission.state';
 
 @Component({
   selector: 'app-permission-edit',
@@ -17,6 +21,8 @@ import { Permission } from '../_shared/interfaces/permission.interface';
   styleUrls: ['./permission-edit.component.scss']
 })
 export class PermissionEditComponent implements OnInit {
+
+  @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
 
   private permissionId: string;
   private permission: Permission;
@@ -31,14 +37,16 @@ export class PermissionEditComponent implements OnInit {
     private readonly snackBar: MatSnackBar,
     private readonly fb: FormBuilder) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initForm();
     this.permissionId = this.route.snapshot.params.id;
-    this.permissions = await this.getPermissions();
-    this.permission = this.permissions.find(p => p.id === this.permissionId);
-    this.updateNameControl();
-    this.updateTypeControl();
-    this.setValidators();
+    this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)).subscribe((permissions) => {
+      this.permissions = permissions;
+      this.permission = this.permissions.find(p => p.id === this.permissionId);
+      this.updateNameControl();
+      this.updateTypeControl();
+      this.setValidators();
+    });
   }
 
   private initForm() {
@@ -60,14 +68,6 @@ export class PermissionEditComponent implements OnInit {
     this.form.controls.name.setValidators([
       Validators.required, nameValidator, uniqueNameValidator(this.permissions)
     ]);
-  }
-
-  private async getPermissions() {
-    // FIXME: I need to investigate how to use selectOnce emitting just the full array
-    return await this.store.select(state => state.permissions.permissions).pipe<Permission[], Permission[]>(
-      skipWhile(permissions => permissions.length <= 0),
-      take(1)
-    ).toPromise();
   }
 
   private redirect() {

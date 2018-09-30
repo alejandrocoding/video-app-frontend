@@ -23,6 +23,7 @@ export class PermissionsViewComponent implements OnInit {
 
   @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
   @Select(PermissionState.isLoading) loading$: Observable<boolean>;
+
   @ViewChild(PermissionsTableComponent) table: PermissionsTableComponent;
 
   constructor(
@@ -50,10 +51,9 @@ export class PermissionsViewComponent implements OnInit {
 
   private deletePermission(permission: Permission) {
     this.table.selection.clear();
-    this.store.dispatch(new DeletePermission(permission.id))
-      .subscribe(() => {
-        this.snackBar.open(`Permission '${permission.name}' has been deleted`, null, { duration: 5000 });
-      });
+    this.store.dispatch(new DeletePermission(permission.id)).subscribe(() => {
+      this.snackBar.open(`Permission '${permission.name}' has been deleted`, null, { duration: 5000 });
+    });
   }
 
 }

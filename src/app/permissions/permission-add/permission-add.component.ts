@@ -3,13 +3,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
-import { Store } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
+
+import { Observable } from 'rxjs';
 import { skipWhile, take } from 'rxjs/internal/operators';
 
 import { nameValidator } from '@validators/name.validator';
 import { uniqueNameValidator } from '@validators/unique-name.validator';
+
 import { AddPermission } from '../_shared/actions/permission.actions';
 import { Permission } from '../_shared/interfaces/permission.interface';
+import { PermissionState } from '../_shared/state/permission.state';
 
 @Component({
   selector: 'app-permission-add',
@@ -17,6 +21,8 @@ import { Permission } from '../_shared/interfaces/permission.interface';
   styleUrls: ['./permission-add.component.scss']
 })
 export class PermissionAddComponent implements OnInit {
+
+  @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
 
   private permissions: Permission[];
 
@@ -31,8 +37,10 @@ export class PermissionAddComponent implements OnInit {
 
   async ngOnInit() {
     this.initForm();
-    this.permissions = await this.getPermissions();
-    this.setValidators();
+    this.permissions$.pipe(skipWhile(permissions => permissions.length === 0), take(1)).subscribe((permissions) => {
+      this.permissions = permissions;
+      this.setValidators();
+    });
   }
 
   private initForm() {
@@ -46,14 +54,6 @@ export class PermissionAddComponent implements OnInit {
     this.form.controls.name.setValidators([
       Validators.required, nameValidator, uniqueNameValidator(this.permissions)
     ]);
-  }
-
-  private async getPermissions() {
-    // FIXME: I need to investigate how to use selectOnce emitting just the full array
-    return await this.store.select(state => state.permissions.permissions).pipe<Permission[], Permission[]>(
-      skipWhile(permissions => permissions.length <= 0),
-      take(1)
-    ).toPromise();
   }
 
   private redirect() {
