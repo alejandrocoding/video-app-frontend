@@ -25,7 +25,10 @@ import { PermissionType } from '@app/permissions/_shared/enums/permission-type.e
 export class RoleAddComponent implements OnInit {
 
   @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
+  @Select(PermissionState.isLoading) loadingPermissions$: Observable<boolean>;
+
   @Select(RoleState.getAllRoles) roles$: Observable<Role[]>;
+  @Select(RoleState.isLoading) loadingRoles$: Observable<boolean>;
 
   private roles: Role[] = [];
 

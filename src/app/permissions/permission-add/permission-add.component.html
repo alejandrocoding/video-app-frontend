@@ -1,6 +1,6 @@
+<mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
 <div class="view-wrapper">
   <h2 class="view-title">Add Permission</h2>
-
   <form [formGroup]="form" fxLayout="column">
     <mat-form-field>
       <input type="text" matInput formControlName="name" placeholder="Name" required />

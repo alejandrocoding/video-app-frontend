@@ -1,3 +1,4 @@
+<mat-progress-bar *ngIf="(loadingRoles$ | async) || (loadingPermissions$ | async)" mode="indeterminate"></mat-progress-bar>
 <div class="view-wrapper">
   <h2 class="view-title">Edit Role</h2>
 

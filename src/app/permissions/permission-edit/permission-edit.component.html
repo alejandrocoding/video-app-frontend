@@ -1,3 +1,4 @@
+<mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
 <div class="view-wrapper">
   <h2 class="view-title">Edit Permission</h2>
 
@@ -14,7 +15,7 @@
       <mat-list fxFlex="25" fxLayout="column" fxLayoutGap="25px">
         <h3>All Permissions</h3>
         <mat-divider></mat-divider>
-        <mat-radio-group fxLayout="column" fxLayoutGap="25px" formControlName="type" disabled>
+        <mat-radio-group fxLayout="column" fxLayoutGap="25px" formControlName="type">
           <mat-radio-button value="FAV">Full Access Videos</mat-radio-button>
           <mat-radio-button value="ROV">Read Only Videos</mat-radio-button>
           <mat-radio-button value="MU">Manage Users</mat-radio-button>

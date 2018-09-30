@@ -23,6 +23,7 @@ import { PermissionState } from '../_shared/state/permission.state';
 export class PermissionAddComponent implements OnInit {
 
   @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
+  @Select(PermissionState.isLoading) loading$: Observable<boolean>;
 
   private permissions: Permission[];
 

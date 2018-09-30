@@ -23,6 +23,7 @@ import { PermissionState } from '../_shared/state/permission.state';
 export class PermissionEditComponent implements OnInit {
 
   @Select(PermissionState.getAllPermissions) permissions$: Observable<Permission[]>;
+  @Select(PermissionState.isLoading) loading$: Observable<boolean>;
 
   private permissionId: string;
   private permission: Permission;
@@ -52,7 +53,7 @@ export class PermissionEditComponent implements OnInit {
   private initForm() {
     this.form = this.fb.group({
       'name': '',
-      'type': ['', Validators.required]
+      'type': [{ value: '', disabled: true }, Validators.required]
     });
   }
 
